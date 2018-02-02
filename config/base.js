@@ -40,9 +40,9 @@ db.Model = db.Model.extend({
     this.attributes = this.pick(this.permittedAttributes)
   },
   toJSON: function (options) {
-    var attrs = _.cloneDeep(this.attributes);
+    const attrs = _.cloneDeep(this.attributes);
 
-    var relations = this.relations;
+    const relations = this.relations;
 
     if (this.pivot) {
       attrs.pivot = this.pivot.attributes;

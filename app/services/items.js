@@ -14,14 +14,15 @@ exports.create = (input, userId) => {
       category: input.category,
       product_code: input.product_code,
       created_by: userId,
-      action_type: "add",
     },{ transacting: transaction })
       .then(item => item.toJSON())
       .then(({id}) => {
           return UserActions.add({
             action : JSON.stringify({
               items : [{
-                id : id
+                id : id,
+                itemProperties: [],
+                variants: []
               }]
             }),
             action_type: "add"
