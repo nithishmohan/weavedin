@@ -7,8 +7,7 @@ exports.up = function(knex, Promise) {
     t.varchar('category', 30).references('name').inTable('categories').notNullable();
     t.string('product_code', '50').notNullable()
     t.integer("created_by").references('id').inTable('users')
-    t.dateTime('created_on').notNullable()
-    t.text("action_type")
+    t.datetime('created_on').notNullable()
     t.boolean("is_active").defaultTo(true)
   })};
 

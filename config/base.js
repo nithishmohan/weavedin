@@ -1,5 +1,6 @@
 "use strict"
-
+const moment = require("moment")
+const _ = require("lodash")
 const knex = require('knex')({
   client: 'mysql',
   connection: {
@@ -30,18 +31,37 @@ db.Model = db.Model.extend({
 
   creating: function () {
     if (!this.get('created_on')) {
-      this.set('created_on', moment.utc())
+      this.set('created_on', moment.utc().format("YYYY-MM-DD HH:mm:ss"))
     }
   },
 
   saving: function () {
     // Remove any properties which don't belong on the model
     this.attributes = this.pick(this.permittedAttributes)
-  }
+  },
+  toJSON: function (options) {
+    var attrs = _.cloneDeep(this.attributes);
+
+    var relations = this.relations;
+
+    if (this.pivot) {
+      attrs.pivot = this.pivot.attributes;
+    }
+
+    if (options && options.shallow) {
+      return attrs;
+    }
+
+    _.each(relations, function (relation, key) {
+      if (key.substring(0, 7) !== '_pivot_') {
+        attrs[key] = relation.toJSON ? relation.toJSON() : relation;
+      }
+    });
+
+    return attrs;
+  },
 }, {
   add: function (newObj, options) {
-    console.log("herrr", newObj)
-    console.log("options", options)
     options = options || {};
     return this.forge(newObj).save(null, options)
   }

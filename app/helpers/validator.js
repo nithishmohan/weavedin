@@ -16,6 +16,10 @@ exports.isValidItem = function(input) {
       "category": {
         "type": "string",
         "required": true
+      },
+      "product_code": {
+        "type": "string",
+        "required": true
       }
     }
   }
