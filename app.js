@@ -3,10 +3,10 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
-const index = require('./routes/index');
 const db = require('./config/base')
+const http = require('http')
+const knex= db.knex
 
-const users = require('./routes/users');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -23,8 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
+require('./routes')(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -44,13 +43,13 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-require('./routes/users')(app);
 
 module.exports = app;
 
 
 
-const http = require('http');
+
+
 
 /**
  * Get port from environment and store in Express.
@@ -60,10 +59,17 @@ const port = process.env.PORT || 3000;
 app.set('port', port);
 
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+return knex.migrate.latest({ directory: './config/migrations', tableName: 'schema_versions'})
+  .then(() => {
+  console.log("heee")
+    return server.listen(port)
+  })
+
+
+
