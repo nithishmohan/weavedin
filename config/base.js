@@ -71,6 +71,9 @@ db.Model = db.Model.extend({
       return foundObj.save(editedObj, options);
     });
   },
+  delete: function (id, options) {
+    options = options || {};
+    return this.forge({id: id}).destroy(options);  }
 })
 
 module.exports = db

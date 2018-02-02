@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
     t.smallint('cost_price').notNullable()
     t.json('properties')
     t.smallint('quantity')
-    t.integer('created_by',11).unsigned().references('id').inTable('users')
+    t.integer('created_by',11).references('id').inTable('users')
     t.dateTime('created_on').notNullable()
     t.string("action_type", '8')
     t.boolean("is_active").defaultTo(true)

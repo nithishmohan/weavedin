@@ -31,7 +31,9 @@ exports.create = (input, userId) => {
           variants: []
         }]
       }),
-      action_type: "add"
+      action_type: "add",
+      action_by : userId,
+
     }, {transacting: transaction})
   }
   return Base.transaction(transaction => {
@@ -94,7 +96,8 @@ exports.update = (input, itemId, userId) =>{
           })
         }
       })),
-      action_type: "edit"
+      action_type: "edit",
+      action_by: userId
     }, {transacting: transaction})
   }
   return Base.transaction(transaction => {
