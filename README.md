@@ -16,3 +16,5 @@ RDS_DB: database name
 do an `npm install` to install the node modules
 
 do an `npm start` to start the application
+
+

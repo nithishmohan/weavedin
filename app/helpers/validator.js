@@ -17,7 +17,7 @@ exports.isValidItem = (input) => {
         "type": "string",
         "required": true
       },
-      "product_code": {
+      "productCode": {
         "type": "string",
         "required": true
       },
@@ -39,11 +39,11 @@ exports.isValidVariant = () => {
         "type": "string",
         "required": true
       },
-      "selling_price": {
+      "sellingPrice": {
         "type": "integer",
         "required": true
       },
-      "cost_price": {
+      "costPrice": {
         "type": "integer",
         "required": true
       },
