@@ -11,7 +11,6 @@ exports.up = function(knex, Promise) {
     t.integer('created_by',11).references('id').inTable('users')
     t.dateTime('created_on').notNullable()
     t.string("action_type", '8')
-    t.boolean("is_active").defaultTo(true)
   })};
 
 exports.down = function(knex, Promise) {

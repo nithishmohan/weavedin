@@ -47,7 +47,7 @@ exports.create = (input, userId) => {
       .then(item => item.toJSON())
       .then(({id}) => {
         return when.join(
-          addVariants(item.variants, id, transaction)
+          addVariants(item.variants, id, transaction),
           addUserAction(id, transaction)
         )
 
@@ -91,7 +91,7 @@ exports.update = (input, itemId, userId) =>{
           variants: item.variants.map(variant => {
             return {
               id : variant.id,
-              variantProperties: _.pick(Object.keys(variant), _.pick(variant, ['name', 'sellingPrice', 'costPrice', 'properties', 'quantity'])
+              variantProperties: _.pick(Object.keys(variant), _.pick(variant, ['name', 'sellingPrice', 'costPrice', 'properties', 'quantity']))
             }
           })
         }
@@ -104,7 +104,7 @@ exports.update = (input, itemId, userId) =>{
     return when.map(input, item => {
       return when.join(
         updateItems(item, transaction),
-        updateVariants(item.variants, transaction)
+        updateVariants(item.variants, transaction),
         addUserAction(item, transaction)
       )
     })

@@ -67,7 +67,6 @@ const server = http.createServer(app);
 
 return knex.migrate.latest({ directory: './config/migrations', tableName: 'schema_versions'})
   .then(() => {
-  console.log("heee")
     return server.listen(port)
   })
 
