@@ -4,9 +4,36 @@ const Items= require("../models/items").Model
 const UserActions= require("../models/user_actions").Model
 const Base = require('../../config/base')
 const _ = require("lodash")
+const Variants = require("../models/variants").Model
 
 
 exports.create = (input, userId) => {
+
+  function addVariants(variants, itemId, transaction) {
+    if(_.isEmpty(variants))
+      return Promise.resolve()
+    return when.map(variants, variant => {
+      const _variant = {last_edited_by : userId, created_by: userId, item_id: itemId}
+      variant.name ? Object.assign(_variant, {name: variant.name}) : null
+      input.sellingPrice ? Object.assign(_variant, {selling_price: variant.selling_price}) : null
+      input.category ? Object.assign(_variant, {category: variant.category}) : null
+      input.product_code ? Object.assign(_variant, {product_code: variant.productCode}) : null
+      return Variants.add(_variant,{ transacting: transaction })
+    })
+  }
+
+  function addUserAction(id, transaction) {
+    return UserActions.add({
+      action : JSON.stringify({
+        items : [{
+          id : id,
+          itemProperties: null,
+          variants: []
+        }]
+      }),
+      action_type: "add"
+    }, {transacting: transaction})
+  }
   return Base.transaction(transaction => {
     return Items.add({
       name: input.name,
@@ -17,17 +44,12 @@ exports.create = (input, userId) => {
     },{ transacting: transaction })
       .then(item => item.toJSON())
       .then(({id}) => {
-          return UserActions.add({
-            action : JSON.stringify({
-              items : [{
-                id : id,
-                itemProperties: null,
-                variants: []
-              }]
-            }),
-            action_type: "add"
-          }, {transacting: transaction})
-      })
+        return when.join(
+          addVariants(item.variants, id, transaction)
+          addUserAction(id, transaction)
+        )
+
+    })
   })
 }
 
@@ -45,7 +67,7 @@ exports.update = (input, itemId, userId) =>{
     return Items.edit(updateItem,{ transacting: transaction })
   }
 
-  function updateVariants(variants) {
+  function updateVariants(variants, transaction) {
     if(_.isEmpty(variants))
       return Promise.resolve()
     return when.map(variants, variant => {

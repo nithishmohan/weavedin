@@ -15,12 +15,10 @@ exports.create =  (req, res) => {
   }
 
   service.create(input, req.user.id)
-    .then(user => {
+    .then(() => {
       res.status(httpStatus.OK).json({
         code: "200",
-        message: "User account created successfully.",
-        auth: true,
-        token: user.auth_token
+        message: "Item created successfully.",
       }).end()
     })
     .catch(err => {

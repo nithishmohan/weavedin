@@ -20,6 +20,10 @@ exports.isValidItem = (input) => {
       "product_code": {
         "type": "string",
         "required": true
+      },
+      "variants" : {
+        "type" : "object",
+        "required" : false
       }
     }
   }
