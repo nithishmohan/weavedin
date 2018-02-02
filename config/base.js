@@ -4,10 +4,10 @@ const _ = require("lodash")
 const knex = require('knex')({
   client: 'mysql',
   connection: {
-    host: 'localhost',
-    user: 'root',
-    password: 'password',
-    database: 'weavedin',
+    host: process.env.RDS_HOSTNAME,
+    user: process.env.RDS_USERNAME,
+    password: process.env.RDS_PASSWORD,
+    database: process.env.RDS_DB,
   },
   pool: {
     min: 2,
