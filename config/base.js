@@ -64,7 +64,13 @@ db.Model = db.Model.extend({
   add: function (newObj, options) {
     options = options || {};
     return this.forge(newObj).save(null, options)
-  }
+  },
+  edit: function (editedObj, options) {
+    options = options || {};
+    return this.forge({id: editedObj.id}).fetch(options).then(function (foundObj) {
+      return foundObj.save(editedObj, options);
+    });
+  },
 })
 
 module.exports = db
