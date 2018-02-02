@@ -9,6 +9,7 @@ exports.up = function(knex, Promise) {
     t.integer("created_by").references('id').inTable('users')
     t.dateTime('created_on').notNullable()
     t.text("action_type")
+    t.boolean("is_active").defaultTo(true)
   })};
 
 exports.down = function(knex, Promise) {
